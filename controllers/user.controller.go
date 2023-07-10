@@ -5,6 +5,7 @@ import (
 
 	"github.com/FianGumilar/gofiber-rest-api/database"
 	"github.com/FianGumilar/gofiber-rest-api/models"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -26,6 +27,16 @@ func CreateUsers(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(err.Error())
 	}
 
+	// Validate
+	validate := validator.New()
+	errValidate := validate.Struct(user)
+	if errValidate != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "failed to validate",
+			"error":   errValidate.Error(),
+		})
+	}
+
 	if user.Name == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Name is required",
@@ -35,12 +46,6 @@ func CreateUsers(c *fiber.Ctx) error {
 	if user.Email == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Email is required",
-		})
-	}
-
-	if len(user.Phone) < 10 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Phone is required",
 		})
 	}
 
