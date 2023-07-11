@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/FianGumilar/gofiber-rest-api/config"
 	"github.com/FianGumilar/gofiber-rest-api/database"
 	"github.com/FianGumilar/gofiber-rest-api/database/migrations"
 	"github.com/FianGumilar/gofiber-rest-api/routes"
@@ -33,5 +34,5 @@ func main() {
 	// ROUTE INIT
 	routes.RouteInit(app)
 
-	app.Listen(":8080")
+	app.Listen(config.Config("PORT"))
 }

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"path/filepath"
 	"runtime"
 )
@@ -12,3 +13,7 @@ var (
 	// Root folder of this project
 	ProjectRootPath = filepath.Join(filepath.Dir(b), "../")
 )
+
+func Config(key string) string {
+	return os.Getenv(key)
+}

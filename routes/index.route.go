@@ -11,6 +11,9 @@ func RouteInit(r *fiber.App) {
 	// Static Files
 	r.Static("/public", config.ProjectRootPath+"/public/asset")
 
+	// Login 
+	r.Post("/login", controllers.Login)
+
 	r.Get("/users", middleware.UserAuth, controllers.GetAllUsers)
 	r.Post("/users", controllers.CreateUsers)
 	r.Get("/users/:id", controllers.GetUserById)

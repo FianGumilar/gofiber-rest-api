@@ -5,6 +5,7 @@ import (
 
 	"github.com/FianGumilar/gofiber-rest-api/database"
 	"github.com/FianGumilar/gofiber-rest-api/models"
+	"github.com/FianGumilar/gofiber-rest-api/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
@@ -37,19 +38,22 @@ func CreateUsers(c *fiber.Ctx) error {
 		})
 	}
 
-	if user.Name == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Name is required",
+	newUser := models.User{
+		Name:  user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+	}
+
+	hashPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "status internal server error",
 		})
 	}
 
-	if user.Email == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Email is required",
-		})
-	}
+	newUser.Password = hashPassword
 
-	database.DB.Debug().Create(&user)
+	database.DB.Debug().Create(&newUser)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Success Created new User",
