@@ -13,6 +13,8 @@ func Migration() {
 		&models.User{},
 		&models.Book{},
 		&models.Login{},
+		&models.Category{},
+		&models.Photo{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate...")

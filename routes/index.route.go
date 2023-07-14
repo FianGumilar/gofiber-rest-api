@@ -23,5 +23,8 @@ func RouteInit(r *fiber.App) {
 
 	// Book
 	r.Get("/books", controllers.GetAllBook)
-	r.Post("/books", utils.SingleFile, controllers.CreateBook)
+	r.Post("/books", utils.HandleSingleFile, controllers.CreateBook)
+
+	// Photos
+	r.Post("/gallery", controllers.CreatePhoto)
 }
